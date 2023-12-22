@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>vault-door-training</title>
+      <link href="/2023/12/22/CTF/vault-door-training/"/>
+      <url>/2023/12/22/CTF/vault-door-training/</url>
+      
+        <content type="html"><![CDATA[<h1 id="vault-door-training"><a href="#vault-door-training" class="headerlink" title="vault-door-training"></a>vault-door-training</h1><p>Points:50</p><h1 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h1><blockquote><p>Your mission is to enter Dr. Evil’s laboratory and retrieve the blueprints for his Doomsday Project. The laboratory is protected by a series of locked vault doors. Each door is controlled by a computer and requires a password to open. Unfortunately, our undercover agents have not been able to obtain the secret passwords for the vault doors, but one of our junior agents obtained the source code for each vault’s computer! You will need to read the source code for each level to figure out what the password is for that vault door. As a warmup, we have created a replica vault in our training facility. The source code for the training vault is here: VaultDoorTraining.java</p></blockquote><h2 id="Hint"><a href="#Hint" class="headerlink" title="Hint"></a>Hint</h2><blockquote><p>The password is revealed in the program’s source code.</p></blockquote><h1 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h1><p>打開source code，發現此function</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">checkPassword</span><span class="params">(String password)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> password.equals(<span class="string">&quot;w4rm1ng_Up_w1tH_jAv4_be8d9806f18&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="Flag"><a href="#Flag" class="headerlink" title="Flag"></a>Flag</h2><blockquote><p>picoCTF{w4rm1ng_Up_w1tH_jAv4_be8d9806f18}</p></blockquote>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> picoCTF </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>學習資訊安全動機與歷程</title>
       <link href="/2023/04/21/%E8%B3%87%E5%AE%89%E7%9B%B8%E9%97%9C/%E5%BF%83%E5%BE%97/2023-04-21-Learning-CyberSecurity/"/>
       <url>/2023/04/21/%E8%B3%87%E5%AE%89%E7%9B%B8%E9%97%9C/%E5%BF%83%E5%BE%97/2023-04-21-Learning-CyberSecurity/</url>
