@@ -33,6 +33,114 @@
     
     
     <entry>
+      <title>picoCTF 2024 Forensic - Scan Surprise</title>
+      <link href="/2024/02/16/CTF/picoCTF2024/Forensic/Scan%20Surprise/Scan%20Surprise/"/>
+      <url>/2024/02/16/CTF/picoCTF2024/Forensic/Scan%20Surprise/Scan%20Surprise/</url>
+      
+        <content type="html"><![CDATA[<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"> ~/CTF/picoCTF2024/forensic/Scan Surprise                                                                         05:55:25</span><br><span class="line">&gt; unzip challenge.zip</span><br><span class="line">Archive:  challenge.zip</span><br><span class="line">   creating: home/ctf-player/drop-in/</span><br><span class="line"> extracting: home/ctf-player/drop-in/flag.png</span><br><span class="line"></span><br><span class="line"> ~/CTF/picoCTF2024/forensic/Scan Surprise                                                                         05:55:29</span><br><span class="line">&gt; <span class="built_in">ls</span></span><br><span class="line">challenge.zip  home</span><br><span class="line"></span><br><span class="line"> ~/CTF/picoCTF2024/forensic/Scan Surprise                                                                         05:55:32</span><br><span class="line">&gt; <span class="built_in">cd</span> home</span><br><span class="line"></span><br><span class="line"> ~/CTF/picoCTF2024/forensic/Scan Surprise/home                                                                    05:55:34</span><br><span class="line">&gt; <span class="built_in">ls</span></span><br><span class="line">ctf-player</span><br><span class="line"></span><br><span class="line"> ~/CTF/picoCTF2024/forensic/Scan Surprise/home                                                                    05:55:35</span><br><span class="line">&gt; <span class="built_in">cd</span> ctf-player</span><br><span class="line"></span><br><span class="line"> ~/CTF/picoCTF2024/forensic/Scan Surprise/home/ctf-player                                                         05:55:36</span><br><span class="line">&gt; <span class="built_in">ls</span></span><br><span class="line">drop-in</span><br><span class="line"></span><br><span class="line"> ~/CTF/picoCTF2024/forensic/Scan Surprise/home/ctf-player                                                         05:55:37</span><br><span class="line">&gt; <span class="built_in">cd</span> drop-in</span><br><span class="line"></span><br><span class="line"> ~/CTF/picoCTF2024/forensic/Scan Surprise/home/ctf-player/drop-in                                                 05:55:40</span><br><span class="line">&gt; <span class="built_in">ls</span></span><br><span class="line">flag.png</span><br><span class="line"></span><br><span class="line"> ~/CTF/picoCTF2024/forensic/Scan Surprise/home/ctf-player/drop-in                                                 05:55:40</span><br></pre></td></tr></table></figure><p>接著拿手機掃就得到flag<br>flag:<code>picoCTF&#123;p33k_@_b00_3f7cf1ae&#125;</code></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> picoCTF </tag>
+            
+            <tag> forensic </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>picoCTF 2024 Forensic - Secret of the Polyglot</title>
+      <link href="/2024/02/16/CTF/picoCTF2024/Forensic/Secret%20of%20the%20Polyglot/Secret%20of%20the%20Polyglot/"/>
+      <url>/2024/02/16/CTF/picoCTF2024/Forensic/Secret%20of%20the%20Polyglot/Secret%20of%20the%20Polyglot/</url>
+      
+        <content type="html"><![CDATA[<p>先把PDF打開後發現一部分flag<br>file 去看發現他是PNG檔案</p><p>所以把他轉成png再打開最後就有完整的flag了</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> /mnt/c/U/L/O/O/筆/b/LuYee6813.github.io/so/_/C/picoCTF2/F/Secret of the Polyglot | main &lt;1&gt;1 !169 ?83            21:56:59</span><br><span class="line">&gt; <span class="built_in">cp</span> flag2of2-final.pdf flag2of2-final.png</span><br></pre></td></tr></table></figure><p>flag:<code>picoCTF&#123;f1u3n7_1n_pn9_&amp;_pdf_724b1287&#125;</code> </p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> picoCTF </tag>
+            
+            <tag> forensic </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>picoCTF 2024 Forensic - Verify</title>
+      <link href="/2024/02/16/CTF/picoCTF2024/Forensic/Verify/Verify/"/>
+      <url>/2024/02/16/CTF/picoCTF2024/Forensic/Verify/Verify/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Verify"><a href="#Verify" class="headerlink" title="Verify"></a>Verify</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">~/CTF/picoCTF2024/forensic/Verify/challenge/home/ctf-player/drop-in                                              23:33:18</span><br><span class="line">&gt; <span class="built_in">sha256sum</span> files/* | grep <span class="string">&quot;467a10447deb3d4e17634cacc2a68ba6c2bb62a6637dad9145ea673bf0be5e02&quot;</span></span><br><span class="line">467a10447deb3d4e17634cacc2a68ba6c2bb62a6637dad9145ea673bf0be5e02  files/c6c8b911</span><br></pre></td></tr></table></figure><p>使用解密腳本</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">~/CTF/picoCTF2024/forensic/Verify/challenge/home/ctf-player/drop-in                                              23:40:43</span><br><span class="line">&gt; sudo ./decrypt.sh files/c6c8b911</span><br><span class="line">Error: <span class="string">&#x27;files/c6c8b911&#x27;</span> is not a valid file. Look inside the <span class="string">&#x27;files&#x27;</span> folder with <span class="string">&#x27;ls -R&#x27;</span>!</span><br></pre></td></tr></table></figure><p>看一下解密腳本發現是路徑問題</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"> ~/CTF/picoCTF2024/forensic/Verify/challenge/home/ctf-player/drop-in                                              23:41:54</span><br><span class="line">&gt; <span class="built_in">cat</span> decrypt.sh</span><br><span class="line"></span><br><span class="line">        <span class="comment">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Check if the user provided a file name as an argument</span></span><br><span class="line">        <span class="keyword">if</span> [ <span class="variable">$#</span> -eq 0 ]; <span class="keyword">then</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;Expected usage: decrypt.sh &lt;filename&gt;&quot;</span></span><br><span class="line">            <span class="built_in">exit</span> 1</span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Store the provided filename in a variable</span></span><br><span class="line">        file_name=<span class="string">&quot;<span class="variable">$1</span>&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Check if the provided argument is a file and not a folder</span></span><br><span class="line">        <span class="keyword">if</span> [ ! -f <span class="string">&quot;/home/ctf-player/drop-in/<span class="variable">$file_name</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;Error: &#x27;<span class="variable">$file_name</span>&#x27; is not a valid file. Look inside the &#x27;files&#x27; folder with &#x27;ls -R&#x27;!&quot;</span></span><br><span class="line">            <span class="built_in">exit</span> 1</span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># If there&#x27;s an error reading the file, print an error message</span></span><br><span class="line">        <span class="keyword">if</span> ! openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 -salt -<span class="keyword">in</span> <span class="string">&quot;/home/ctf-player/drop-in/<span class="variable">$file_name</span>&quot;</span> -k picoCTF; <span class="keyword">then</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;Error: Failed to decrypt &#x27;<span class="variable">$file_name</span>&#x27;. This flag is fake! Keep looking!&quot;</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">        %</span><br></pre></td></tr></table></figure><p>是可以解決路徑問題，但我懶所以偷來用XD 就解出來了</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 -salt -<span class="keyword">in</span>  files/c6c8b911 -k picoCTF</span><br><span class="line">picoCTF&#123;trust_but_verify_c6c8b911&#125;</span><br></pre></td></tr></table></figure><p>flag: <code>picoCTF&#123;trust_but_verify_c6c8b911&#125;</code></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> picoCTF </tag>
+            
+            <tag> forensic </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>picoCTF 2024 Forensic - Mob psycho</title>
+      <link href="/2024/02/16/CTF/picoCTF2024/Forensic/Mob%20psycho/Mob%20psycho/"/>
+      <url>/2024/02/16/CTF/picoCTF2024/Forensic/Mob%20psycho/Mob%20psycho/</url>
+      
+        <content type="html"><![CDATA[<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/mnt/c/U/L/O/O/筆/b/LuYee6813.github.io/so/_/CTF/picoCTF2024/Forensic/Mob psycho | main &lt;1&gt;1 !169 ?83            01:44:26</span><br><span class="line">&gt; xxd -r -p res/color/flag.txt</span><br><span class="line">picoCTF&#123;ax8mC0RU6ve_NX85l4ax8mCl_a3eb5ac2&#125;%</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> picoCTF </tag>
+            
+            <tag> forensic </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>picoCTF 2021 reverse write-up</title>
       <link href="/2024/01/30/CTF/picoCTF/All-Write-Up/picoCTF2021-Write-up/"/>
       <url>/2024/01/30/CTF/picoCTF/All-Write-Up/picoCTF2021-Write-up/</url>
