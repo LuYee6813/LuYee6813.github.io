@@ -1,3 +1,7 @@
+body {
+    font-size: 16px; /* 你可以將這個值改成你想要的字體大小，例如 14px, 18px 等 */
+}
+
 #aside-content .card-announcement .item-headline i {
     color: #00ff25;
 }
@@ -9,3 +13,4 @@
 .framework-info {
     display: none;
 }
+
