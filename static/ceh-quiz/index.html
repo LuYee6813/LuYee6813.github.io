@@ -503,6 +503,13 @@
     function renderSetup() {
       const list = $('bankList');
       list.innerHTML = '';
+      const total = BANKS.reduce((s, b) => s + b.questions.length, 0);
+      const allDiv = document.createElement('label');
+      allDiv.className = 'bank-item';
+      allDiv.innerHTML = `<input type="checkbox" id="allBanks">
+      <span class="bank-title"><b>總考題(全部題庫、已去重)</b></span>
+      <span class="bank-count">${total} 題</span>`;
+      list.appendChild(allDiv);
       BANKS.forEach((b, i) => {
         const div = document.createElement('label');
         div.className = 'bank-item';
@@ -511,6 +518,11 @@
       <span class="bank-count">${b.questions.length} 題</span>`;
         list.appendChild(div);
       });
+      $('allBanks').onchange = e => {
+        document.querySelectorAll('#bankList input[data-i]').forEach(x => {
+          x.checked = e.target.checked;
+        });
+      };
     }
     document.querySelectorAll('.mode-btn').forEach(el => {
       el.onclick = () => {
@@ -529,7 +541,9 @@
     }
 
     $('startBtn').onclick = () => {
-      const chosen = [...document.querySelectorAll('#bankList input:checked')].map(x => +x.dataset.i);
+      const chosen = $('allBanks').checked
+        ? BANKS.map((_, i) => i)
+        : [...document.querySelectorAll('#bankList input[data-i]:checked')].map(x => +x.dataset.i);
       if (!chosen.length) {
         alert('請至少選擇一個題庫');
         return;
