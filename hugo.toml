@@ -143,6 +143,12 @@ url = "/search/"
 weight = 40
 
 [[menu.main]]
+identifier = "ceh-quiz"
+name = "CEH Quiz"
+url = "/ceh-quiz/"
+weight = 45
+
+[[menu.main]]
 identifier = "about"
 name = "About"
 url = "/about/"

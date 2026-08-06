@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CEH v13 考古題測驗</title>
+  <style>
+    :root {
+      --bg: #0f1420;
+      --card: #1a2233;
+      --card2: #212c42;
+      --text: #e8ecf4;
+      --muted: #93a0b8;
+      --accent: #4f8cff;
+      --green: #2ecc8f;
+      --red: #ff5d6c;
+      --orange: #ffb347;
+      --border: #2e3a54;
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 24px 16px 80px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin: 0 0 4px;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: .9rem;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .bank-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+
+    .bank-item:hover {
+      background: var(--card2);
+    }
+
+    .bank-item input {
+      accent-color: var(--accent);
+      width: 18px;
+      height: 18px;
+    }
+
+    .bank-title {
+      flex: 1;
+    }
+
+    .bank-count {
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-top: 14px;
+    }
+
+    label.opt-label {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    select,
+    input[type=number] {
+      background: var(--card2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: .95rem;
+    }
+
+    .btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 26px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: filter .15s;
+    }
+
+    .btn:hover {
+      filter: brightness(1.12);
+    }
+
+    .btn:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    .btn.ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn.small {
+      padding: 8px 16px;
+      font-size: .88rem;
+    }
+
+    .mode-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .mode-btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card2);
+      color: var(--text);
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .mode-btn.active {
+      border-color: var(--accent);
+      background: rgba(79, 140, 255, .14);
+    }
+
+    .mode-btn .t {
+      font-weight: 700;
+    }
+
+    .mode-btn .d {
+      font-size: .8rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* quiz */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .progress-txt {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .pbar {
+      height: 6px;
+      background: var(--card2);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .pbar>div {
+      height: 100%;
+      background: var(--accent);
+      transition: width .25s;
+    }
+
+    .qsrc {
+      font-size: .78rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .qtext {
+      font-size: 1.05rem;
+      font-weight: 600;
+      white-space: pre-wrap;
+      margin-bottom: 6px;
+    }
+
+    .qtext-en {
+      font-size: .88rem;
+      color: var(--muted);
+      white-space: pre-wrap;
+      margin-bottom: 6px;
+    }
+
+    .options {
+      margin-top: 16px;
+    }
+
+    .opt {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: background .12s, border-color .12s;
+    }
+
+    .opt:hover {
+      background: var(--card2);
+    }
+
+    .opt .tag {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .opt .body {
+      flex: 1;
+    }
+
+    .opt .oexpl {
+      font-size: .82rem;
+      color: var(--muted);
+      margin-top: 6px;
+      border-top: 1px dashed var(--border);
+      padding-top: 6px;
+    }
+
+    .opt.selected {
+      border-color: var(--accent);
+      background: rgba(79, 140, 255, .12);
+    }
+
+    .opt.selected .tag {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .opt.correct {
+      border-color: var(--green);
+      background: rgba(46, 204, 143, .12);
+    }
+
+    .opt.correct .tag {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+
+    .opt.wrong {
+      border-color: var(--red);
+      background: rgba(255, 93, 108, .12);
+    }
+
+    .opt.wrong .tag {
+      background: var(--red);
+      color: #fff;
+      border-color: var(--red);
+    }
+
+    .opt.locked {
+      cursor: default;
+    }
+
+    .opt.locked:hover {
+      background: inherit;
+    }
+
+    .opt.correct.locked:hover {
+      background: rgba(46, 204, 143, .12);
+    }
+
+    .opt.wrong.locked:hover {
+      background: rgba(255, 93, 108, .12);
+    }
+
+    .expl {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-left: 3px solid var(--orange);
+      background: var(--card2);
+      border-radius: 0 10px 10px 0;
+      font-size: .9rem;
+      white-space: pre-wrap;
+      color: #cfd8e8;
+      max-height: 420px;
+      overflow-y: auto;
+    }
+
+    .expl b {
+      color: var(--orange);
+    }
+
+    .verdict {
+      font-weight: 700;
+      margin-top: 14px;
+    }
+
+    .verdict.ok {
+      color: var(--green);
+    }
+
+    .verdict.no {
+      color: var(--red);
+    }
+
+    .navrow {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .spacer {
+      flex: 1;
+    }
+
+    /* result */
+    .score-big {
+      font-size: 3rem;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .score-sub {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .score-big.pass {
+      color: var(--green);
+    }
+
+    .score-big.fail {
+      color: var(--red);
+    }
+
+    .review-q {
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      margin-top: 14px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    .multi-hint {
+      color: var(--orange);
+      font-size: .82rem;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <h1>CEH v13 考古題測驗</h1>
+    <div class="sub">312-50v13 練習題庫 · 資料來源:考古 PDF</div>
+
+    <!-- ===== 設定畫面 ===== -->
+    <div id="setup">
+      <div class="card">
+        <b>選擇題庫</b>
+        <div id="bankList" style="margin-top:12px;"></div>
+        <div class="row">
+          <label class="opt-label">題數:
+            <select id="numQ">
+              <option value="10">10 題</option>
+              <option value="25" selected>25 題</option>
+              <option value="50">50 題</option>
+              <option value="125">125 題(模擬正式考試)</option>
+              <option value="0">全部</option>
+            </select>
+          </label>
+          <label class="opt-label"><input type="checkbox" id="shuffleQ" checked> 隨機出題順序</label>
+          <label class="opt-label"><input type="checkbox" id="shuffleOpt" checked> 隨機選項順序</label>
+        </div>
+        <div class="mode-group">
+          <div class="mode-btn active" data-mode="practice">
+            <div class="t">練習模式</div>
+            <div class="d">每題作答後立即顯示答案與解析</div>
+          </div>
+          <div class="mode-btn" data-mode="exam">
+            <div class="t">考試模式</div>
+            <div class="d">全部作答完才顯示成績與檢討</div>
+          </div>
+        </div>
+        <div class="row">
+          <button class="btn" id="startBtn">開始測驗</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 測驗畫面 ===== -->
+    <div id="quiz" class="hidden">
+      <div class="topbar">
+        <span class="progress-txt" id="progTxt"></span>
+        <span class="progress-txt" id="scoreTxt"></span>
+        <button class="btn ghost small" id="quitBtn">結束測驗</button>
+      </div>
+      <div class="pbar">
+        <div id="pfill" style="width:0%"></div>
+      </div>
+      <div class="card">
+        <div class="qsrc" id="qsrc"></div>
+        <div class="qtext" id="qtext"></div>
+        <div class="qtext-en" id="qtextEn"></div>
+        <div class="multi-hint hidden" id="multiHint">※ 此題為複選題,請選擇所有正確答案</div>
+        <div class="options" id="opts"></div>
+        <div class="verdict hidden" id="verdict"></div>
+        <div class="expl hidden" id="expl"></div>
+        <div class="navrow">
+          <button class="btn ghost" id="prevBtn">上一題</button>
+          <div class="spacer"></div>
+          <button class="btn" id="submitBtn">送出答案</button>
+          <button class="btn" id="nextBtn">下一題</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 結果畫面 ===== -->
+    <div id="result" class="hidden">
+      <div class="card">
+        <div class="score-big" id="scoreBig"></div>
+        <div class="score-sub" id="scoreSub"></div>
+        <div class="navrow" style="justify-content:center;">
+          <button class="btn" id="retryWrongBtn">重測答錯題目</button>
+          <button class="btn ghost" id="backBtn">回到首頁</button>
+        </div>
+      </div>
+      <div class="card" id="reviewCard">
+        <b>答錯題目檢討</b>
+        <div id="reviewList"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+    'use strict';
+    const $ = id => document.getElementById(id);
+    const LETTERS = 'ABCDEF';
+
+    let mode = 'practice';
+    let quiz = []; // [{bank, q, options[{text,isAns}], shuffledIdx...}]
+    let cur = 0;
+    let answered = []; // per question: {picked:Set, submitted:bool, correct:bool}
+
+    /* ---------- 設定畫面 ---------- */
+    function renderSetup() {
+      const list = $('bankList');
+      list.innerHTML = '';
+      BANKS.forEach((b, i) => {
+        const div = document.createElement('label');
+        div.className = 'bank-item';
+        div.innerHTML = `<input type="checkbox" data-i="${i}" ${i === BANKS.length - 1 ? 'checked' : ''}>
+      <span class="bank-title">${b.title}${b.lang === 'zh' ? '(中文)' : '(英文)'}</span>
+      <span class="bank-count">${b.questions.length} 題</span>`;
+        list.appendChild(div);
+      });
+    }
+    document.querySelectorAll('.mode-btn').forEach(el => {
+      el.onclick = () => {
+        document.querySelectorAll('.mode-btn').forEach(x => x.classList.remove('active'));
+        el.classList.add('active');
+        mode = el.dataset.mode;
+      };
+    });
+
+    function shuffle(a) {
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    $('startBtn').onclick = () => {
+      const chosen = [...document.querySelectorAll('#bankList input:checked')].map(x => +x.dataset.i);
+      if (!chosen.length) {
+        alert('請至少選擇一個題庫');
+        return;
+      }
+      let pool = [];
+      chosen.forEach(i => {
+        BANKS[i].questions.forEach(q => pool.push({
+          bank: BANKS[i].title,
+          ...q
+        }));
+      });
+      if ($('shuffleQ').checked) shuffle(pool);
+      const n = +$('numQ').value;
+      if (n > 0) pool = pool.slice(0, n);
+      const shufOpt = $('shuffleOpt').checked;
+      quiz = pool.map(q => {
+        let opts = q.options.map((t, i) => ({
+          text: t,
+          isAns: q.answers.includes(i),
+          oi: i
+        }));
+        if (shufOpt) shuffle(opts);
+        return {
+          ...q,
+          opts
+        };
+      });
+      answered = quiz.map(() => ({
+        picked: new Set(),
+        submitted: false,
+        correct: false
+      }));
+      cur = 0;
+      startQuiz(pool.length);
+    };
+
+    function startQuiz() {
+      $('setup').classList.add('hidden');
+      $('result').classList.add('hidden');
+      $('quiz').classList.remove('hidden');
+      renderQ();
+    }
+
+    /* ---------- 測驗畫面 ---------- */
+    function renderQ() {
+      const q = quiz[cur],
+        st = answered[cur];
+      $('progTxt').textContent = `第 ${cur + 1} / ${quiz.length} 題`;
+      const done = answered.filter(a => a.submitted || a.picked.size).length;
+      const ok = answered.filter(a => a.submitted && a.correct).length;
+      const doneSub = answered.filter(a => a.submitted).length;
+      $('scoreTxt').textContent = mode === 'practice' && doneSub ? `答對 ${ok} / ${doneSub}` : '';
+      $('pfill').style.width = (done / quiz.length * 100) + '%';
+      $('qsrc').textContent = `${q.bank} · 原題號 Q${q.num}`;
+      $('qtext').textContent = q.q;
+      $('qtextEn').textContent = q.q_en || '';
+      $('multiHint').classList.toggle('hidden', q.answers.length <= 1);
+
+      const box = $('opts');
+      box.innerHTML = '';
+      const locked = st.submitted && mode === 'practice';
+      q.opts.forEach((o, i) => {
+        const div = document.createElement('div');
+        div.className = 'opt' + (locked ? ' locked' : '');
+        if (st.picked.has(i)) div.classList.add('selected');
+        let oexpl = '';
+        if (locked) {
+          div.classList.remove('selected');
+          if (o.isAns) div.classList.add('correct');
+          else if (st.picked.has(i)) div.classList.add('wrong');
+          if (q.expl_opts && q.expl_opts[o.oi])
+            oexpl = `<div class="oexpl">${escapeHtml(q.expl_opts[o.oi])}</div>`;
+        }
+        div.innerHTML = `<span class="tag">${LETTERS[i]}</span><span class="body">${escapeHtml(o.text)}${oexpl}</span>`;
+        if (!locked) div.onclick = () => togglePick(i);
+        box.appendChild(div);
+      });
+
+      // verdict + explanation
+      const showFb = st.submitted && (mode === 'practice');
+      $('verdict').classList.toggle('hidden', !showFb);
+      $('expl').classList.toggle('hidden', !(showFb && q.explanation));
+      if (showFb) {
+        $('verdict').textContent = st.correct ? '✔ 答對了!' : '✘ 答錯了,正確答案:' +
+          q.opts.map((o, i) => o.isAns ? LETTERS[i] : null).filter(Boolean).join('、');
+        $('verdict').className = 'verdict ' + (st.correct ? 'ok' : 'no');
+        $('expl').textContent = q.explanation || '';
+      }
+
+      $('prevBtn').disabled = cur === 0;
+      $('submitBtn').classList.toggle('hidden', mode === 'exam' || st.submitted);
+      $('submitBtn').disabled = st.picked.size === 0;
+      $('nextBtn').textContent = cur === quiz.length - 1 ? '完成測驗' : '下一題';
+      $('nextBtn').classList.remove('hidden');
+    }
+
+    function togglePick(i) {
+      const q = quiz[cur],
+        st = answered[cur];
+      if (st.submitted && mode === 'practice') return;
+      if (q.answers.length > 1) {
+        st.picked.has(i) ? st.picked.delete(i) : st.picked.add(i);
+      } else {
+        st.picked.clear();
+        st.picked.add(i);
+      }
+      renderQ();
+    }
+
+    function gradeCur() {
+      const q = quiz[cur],
+        st = answered[cur];
+      st.submitted = true;
+      const ansSet = new Set(q.opts.map((o, i) => o.isAns ? i : -1).filter(x => x >= 0));
+      st.correct = ansSet.size === st.picked.size && [...st.picked].every(x => ansSet.has(x));
+    }
+
+    $('submitBtn').onclick = () => {
+      const st = answered[cur];
+      if (!st.picked.size) return;
+      gradeCur();
+      renderQ();
+    };
+
+    function goNext() {
+      const st = answered[cur];
+      // 練習模式:已選答案但未送出時,先判分並顯示解析
+      if (mode === 'practice' && !st.submitted && st.picked.size) {
+        gradeCur();
+        renderQ();
+        return;
+      }
+      if (cur < quiz.length - 1) {
+        cur++;
+        renderQ();
+      } else finish();
+    }
+    $('nextBtn').onclick = goNext;
+    $('prevBtn').onclick = () => {
+      if (cur > 0) {
+        cur--;
+        renderQ();
+      }
+    };
+    $('quitBtn').onclick = () => {
+      if (confirm('確定要結束測驗並查看成績?')) finish();
+    };
+
+    /* ---------- 結果畫面 ---------- */
+    function finish() {
+      // 考試模式:結束時統一判分
+      answered.forEach((st, i) => {
+        if (!st.submitted) {
+          st.submitted = true;
+          const ansSet = new Set(quiz[i].opts.map((o, j) => o.isAns ? j : -1).filter(x => x >= 0));
+          st.correct = st.picked.size > 0 && ansSet.size === st.picked.size && [...st.picked].every(x => ansSet.has(x));
+        }
+      });
+      const total = quiz.length;
+      const ok = answered.filter(a => a.correct).length;
+      const pct = Math.round(ok / total * 100);
+      $('quiz').classList.add('hidden');
+      $('result').classList.remove('hidden');
+      $('scoreBig').textContent = pct + '%';
+      $('scoreBig').className = 'score-big ' + (pct >= 70 ? 'pass' : 'fail');
+      $('scoreSub').textContent = `答對 ${ok} / ${total} 題(CEH 及格線約 60%–85%,常以 70% 為基準)`;
+
+      const wrong = quiz.map((q, i) => ({
+        q,
+        st: answered[i]
+      })).filter(x => !x.st.correct);
+      const list = $('reviewList');
+      list.innerHTML = '';
+      $('reviewCard').classList.toggle('hidden', wrong.length === 0);
+      wrong.forEach(({
+        q,
+        st
+      }) => {
+        const div = document.createElement('div');
+        div.className = 'review-q';
+        const ansLetters = q.opts.map((o, i) => o.isAns ? LETTERS[i] : null).filter(Boolean).join('、');
+        const pickedLetters = [...st.picked].sort().map(i => LETTERS[i]).join('、') || '未作答';
+        let optHtml = q.opts.map((o, i) => {
+          const oexpl = q.expl_opts && q.expl_opts[o.oi] ?
+            `<div class="oexpl">${escapeHtml(q.expl_opts[o.oi])}</div>` : '';
+          return `<div class="opt locked ${o.isAns ? 'correct' : (st.picked.has(i) ? 'wrong' : '')}">
+        <span class="tag">${LETTERS[i]}</span><span class="body">${escapeHtml(o.text)}${oexpl}</span></div>`;
+        }).join('');
+        div.innerHTML = `<div class="qsrc">${q.bank} · 原題號 Q${q.num}</div>
+      <div class="qtext">${escapeHtml(q.q)}</div>
+      ${q.q_en ? `<div class="qtext-en">${escapeHtml(q.q_en)}</div>` : ''}
+      <div class="options">${optHtml}</div>
+      <div class="verdict no">你的答案:${pickedLetters} → 正確答案:${ansLetters}</div>
+      ${q.explanation ? `<div class="expl">${escapeHtml(q.explanation)}</div>` : ''}`;
+        list.appendChild(div);
+      });
+      window.__wrongSet = wrong.map(x => x.q);
+    }
+
+    $('retryWrongBtn').onclick = () => {
+      const wrong = window.__wrongSet || [];
+      if (!wrong.length) {
+        alert('沒有答錯的題目!');
+        return;
+      }
+      quiz = wrong.map(q => {
+        let opts = q.options.map((t, i) => ({
+          text: t,
+          isAns: q.answers.includes(i),
+          oi: i
+        }));
+        shuffle(opts);
+        return {
+          ...q,
+          opts
+        };
+      });
+      shuffle(quiz);
+      answered = quiz.map(() => ({
+        picked: new Set(),
+        submitted: false,
+        correct: false
+      }));
+      cur = 0;
+      startQuiz();
+    };
+    $('backBtn').onclick = () => {
+      $('result').classList.add('hidden');
+      $('setup').classList.remove('hidden');
+    };
+
+    function escapeHtml(s) {
+      return (s || '').replace(/[&<>"']/g, c =>
+        ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        } [c]));
+    }
+
+    renderSetup();
+  </script>
+</body>
+
+</html>
