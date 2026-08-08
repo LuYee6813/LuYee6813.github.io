@@ -402,6 +402,76 @@
       font-size: .82rem;
       margin-top: 4px;
     }
+
+    /* profile + stats */
+    .prow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .prow select {
+      min-width: 130px;
+    }
+
+    .prow .grow {
+      flex: 1;
+    }
+
+    .statsbox {
+      margin-top: 14px;
+      font-size: .85rem;
+    }
+
+    .stat-title {
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .bar-label {
+      flex: 0 0 44%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: .8rem;
+    }
+
+    .bar-wrap {
+      flex: 1;
+      height: 8px;
+      background: var(--card2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .bar {
+      display: block;
+      height: 100%;
+      background: var(--orange);
+    }
+
+    .bar-num {
+      flex: 0 0 26px;
+      text-align: right;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .wrong-item {
+      border-color: var(--orange);
+    }
   </style>
 </head>
 
@@ -412,6 +482,19 @@
 
     <!-- ===== 設定畫面 ===== -->
     <div id="setup">
+      <div class="card" id="profileCard">
+        <div class="prow">
+          <b>使用者</b>
+          <select id="profileSel"></select>
+          <button class="btn ghost small" id="addProfileBtn">新增</button>
+          <button class="btn ghost small" id="delProfileBtn">刪除</button>
+          <span class="grow"></span>
+          <button class="btn ghost small" id="exportBtn">匯出</button>
+          <button class="btn ghost small" id="importBtn">匯入</button>
+          <input type="file" id="importFile" accept="application/json" class="hidden">
+        </div>
+        <div class="statsbox" id="statsBox"></div>
+      </div>
       <div class="card">
         <b>選擇題庫</b>
         <div id="bankList" style="margin-top:12px;"></div>
@@ -494,6 +577,100 @@
     const $ = id => document.getElementById(id);
     const LETTERS = 'ABCDEFGH';
 
+    /* ---------- 使用者 / 錯題存檔 (localStorage) ---------- */
+    const PKEY = 'ceh_profiles', CKEY = 'ceh_current', DKEY = n => 'ceh_data_' + n;
+
+    function jget(k, fallback) {
+      try {
+        const v = JSON.parse(localStorage.getItem(k));
+        return v == null ? fallback : v;
+      } catch (e) {
+        return fallback;
+      }
+    }
+    const loadProfiles = () => jget(PKEY, []);
+    const saveProfiles = p => localStorage.setItem(PKEY, JSON.stringify(p));
+    const curProfile = () => localStorage.getItem(CKEY) || '';
+    const setCur = n => localStorage.setItem(CKEY, n);
+    const loadData = n => jget(DKEY(n), { wrong: {} });
+    const saveData = (n, d) => localStorage.setItem(DKEY(n), JSON.stringify(d));
+
+    function ensureProfile() {
+      let ps = loadProfiles();
+      if (!ps.length) { ps = ['預設']; saveProfiles(ps); }
+      let c = curProfile();
+      if (!c || !ps.includes(c)) { c = ps[0]; setCur(c); }
+      return c;
+    }
+
+    // 題目索引:用 bankId#num 找回原題,供錯題複習
+    const QIDX = {};
+    BANKS.forEach(b => b.questions.forEach(q => {
+      QIDX[b.id + '#' + q.num] = { q, bankId: b.id, bankTitle: b.title };
+    }));
+
+    const wrongList = () => Object.values(loadData(curProfile()).wrong || {});
+    const wrongCount = () => wrongList().length;
+
+    // 每次測驗結束把作答結果寫進目前使用者:答錯累積、答對則移除(視為已掌握)
+    function recordResult() {
+      const name = curProfile();
+      const d = loadData(name);
+      d.wrong = d.wrong || {};
+      quiz.forEach((q, i) => {
+        const st = answered[i];
+        if (!st.picked.size) return; // 只記錄實際有作答的題目
+        const key = q.bankId + '#' + q.num;
+        if (st.correct) {
+          if (d.wrong[key]) delete d.wrong[key];
+        } else {
+          const e = d.wrong[key] || {
+            bankId: q.bankId, num: q.num, bankTitle: q.bank,
+            category: q.category || '', cnt: 0
+          };
+          e.cnt++;
+          e.ts = Date.now();
+          d.wrong[key] = e;
+        }
+      });
+      saveData(name, d);
+    }
+
+    // 目前錯題依領域分組(弱項統計)
+    function domainStats() {
+      const m = {};
+      wrongList().forEach(e => {
+        const c = e.category || '未分類';
+        m[c] = (m[c] || 0) + 1;
+      });
+      return Object.entries(m).sort((a, b) => b[1] - a[1]);
+    }
+
+    function renderProfile() {
+      ensureProfile();
+      const sel = $('profileSel');
+      const ps = loadProfiles(), c = curProfile();
+      sel.innerHTML = ps.map(n =>
+        `<option value="${escapeHtml(n)}" ${n === c ? 'selected' : ''}>${escapeHtml(n)}</option>`
+      ).join('');
+      renderStats();
+    }
+
+    function renderStats() {
+      const wc = wrongCount(), box = $('statsBox');
+      if (!wc) {
+        box.innerHTML = '<span class="muted">目前沒有錯題紀錄，去測驗後答錯的題目會存在這裡。</span>';
+        return;
+      }
+      const ds = domainStats(), max = ds[0][1];
+      box.innerHTML = `<div class="stat-title">目前累積錯題 <b>${wc}</b> 題 · 弱項領域分布(答對即自動移除)</div>` +
+        ds.map(([c, n]) =>
+          `<div class="bar-row"><span class="bar-label" title="${escapeHtml(c)}">${escapeHtml(c)}</span>` +
+          `<span class="bar-wrap"><span class="bar" style="width:${Math.round(n / max * 100)}%"></span></span>` +
+          `<span class="bar-num">${n}</span></div>`
+        ).join('');
+    }
+
     let mode = 'practice';
     let quiz = []; // [{bank, q, options[{text,isAns}], shuffledIdx...}]
     let cur = 0;
@@ -501,9 +678,20 @@
 
     /* ---------- 設定畫面 ---------- */
     function renderSetup() {
+      renderProfile();
       const list = $('bankList');
       list.innerHTML = '';
       const total = BANKS.reduce((s, b) => s + b.questions.length, 0);
+
+      // 錯題複習(依目前使用者)
+      const wc = wrongCount();
+      const wrongDiv = document.createElement('label');
+      wrongDiv.className = 'bank-item wrong-item';
+      wrongDiv.innerHTML = `<input type="checkbox" id="wrongReview" ${wc ? '' : 'disabled'}>
+      <span class="bank-title"><b>📌 我的錯題複習</b></span>
+      <span class="bank-count">${wc} 題</span>`;
+      list.appendChild(wrongDiv);
+
       const allDiv = document.createElement('label');
       allDiv.className = 'bank-item';
       allDiv.innerHTML = `<input type="checkbox" id="allBanks">
@@ -541,20 +729,35 @@
     }
 
     $('startBtn').onclick = () => {
+      const wrongOn = $('wrongReview') && $('wrongReview').checked;
       const chosen = $('allBanks').checked
         ? BANKS.map((_, i) => i)
         : [...document.querySelectorAll('#bankList input[data-i]:checked')].map(x => +x.dataset.i);
-      if (!chosen.length) {
-        alert('請至少選擇一個題庫');
+      if (!chosen.length && !wrongOn) {
+        alert('請至少選擇一個題庫或錯題複習');
         return;
       }
       let pool = [];
+      const have = new Set();
       chosen.forEach(i => {
-        BANKS[i].questions.forEach(q => pool.push({
-          bank: BANKS[i].title,
-          ...q
-        }));
+        BANKS[i].questions.forEach(q => {
+          have.add(BANKS[i].id + '#' + q.num);
+          pool.push({ bank: BANKS[i].title, bankId: BANKS[i].id, ...q });
+        });
       });
+      if (wrongOn) {
+        wrongList().forEach(e => {
+          const key = e.bankId + '#' + e.num, rec = QIDX[key];
+          if (rec && !have.has(key)) {
+            have.add(key);
+            pool.push({ bank: rec.bankTitle, bankId: rec.bankId, ...rec.q });
+          }
+        });
+      }
+      if (!pool.length) {
+        alert('沒有可出的題目');
+        return;
+      }
       if ($('shuffleQ').checked) shuffle(pool);
       const n = +$('numQ').value;
       if (n > 0) pool = pool.slice(0, n);
@@ -702,6 +905,7 @@
           st.correct = st.picked.size > 0 && ansSet.size === st.picked.size && [...st.picked].every(x => ansSet.has(x));
         }
       });
+      recordResult();
       const total = quiz.length;
       const ok = answered.filter(a => a.correct).length;
       const pct = Math.round(ok / total * 100);
@@ -773,6 +977,7 @@
     $('backBtn').onclick = () => {
       $('result').classList.add('hidden');
       $('setup').classList.remove('hidden');
+      renderSetup();
     };
 
     function escapeHtml(s) {
@@ -785,6 +990,69 @@
           "'": '&#39;'
         } [c]));
     }
+
+    /* ---------- 使用者管理 ---------- */
+    $('profileSel').onchange = e => { setCur(e.target.value); renderSetup(); };
+
+    $('addProfileBtn').onclick = () => {
+      const n = (prompt('輸入新使用者名稱:') || '').trim();
+      if (!n) return;
+      const ps = loadProfiles();
+      if (!ps.includes(n)) ps.push(n);
+      saveProfiles(ps);
+      setCur(n);
+      renderSetup();
+    };
+
+    $('delProfileBtn').onclick = () => {
+      const ps = loadProfiles(), c = curProfile();
+      if (ps.length <= 1) { alert('至少要保留一個使用者'); return; }
+      if (!confirm(`確定刪除使用者「${c}」及其所有錯題紀錄?`)) return;
+      localStorage.removeItem(DKEY(c));
+      const rest = ps.filter(x => x !== c);
+      saveProfiles(rest);
+      setCur(rest[0]);
+      renderSetup();
+    };
+
+    $('exportBtn').onclick = () => {
+      const name = curProfile();
+      const payload = { profile: name, data: loadData(name), exportedAt: new Date().toISOString() };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'ceh_錯題_' + name + '.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    };
+
+    $('importBtn').onclick = () => $('importFile').click();
+    $('importFile').onchange = e => {
+      const f = e.target.files[0];
+      if (!f) return;
+      const r = new FileReader();
+      r.onload = () => {
+        try {
+          const obj = JSON.parse(r.result);
+          const inc = (obj.data && obj.data.wrong) || obj.wrong || {};
+          const name = curProfile();
+          const d = loadData(name);
+          d.wrong = d.wrong || {};
+          let add = 0;
+          Object.entries(inc).forEach(([k, v]) => {
+            if (!d.wrong[k]) { d.wrong[k] = v; add++; }
+            else { d.wrong[k].cnt = Math.max(d.wrong[k].cnt || 1, v.cnt || 1); }
+          });
+          saveData(name, d);
+          renderSetup();
+          alert(`匯入完成，新增 ${add} 題錯題到「${name}」`);
+        } catch (err) {
+          alert('匯入失敗:檔案格式不正確');
+        }
+      };
+      r.readAsText(f);
+      e.target.value = '';
+    };
 
     renderSetup();
   </script>
