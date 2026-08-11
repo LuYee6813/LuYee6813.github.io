@@ -612,8 +612,10 @@
     }
 
     .correct-mark {
+      flex-shrink: 0;
       color: var(--green);
       font-weight: 700;
+      font-size: .78rem;
     }
 
     .qcard-expl {
@@ -717,7 +719,7 @@
         </div>
         <div class="row">
           <button class="btn" id="startBtn">開始測驗</button>
-          <button class="btn ghost" id="browseBtn">📖 瀏覽題庫(看題對答案)</button>
+          <button class="btn ghost" id="browseBtn">瀏覽題庫(看題對答案)</button>
         </div>
       </div>
     </div>
@@ -768,12 +770,12 @@
     <!-- ===== 瀏覽題庫畫面 ===== -->
     <div id="browse" class="hidden">
       <div class="topbar">
-        <b>📖 瀏覽題庫 · CEHv13 完整情境題庫</b>
+        <b>瀏覽題庫 · CEHv13 完整情境題庫</b>
         <button class="btn ghost small" id="browseBackBtn">回到首頁</button>
       </div>
       <div class="card">
         <div class="brow">
-          <input type="text" id="browseSearch" placeholder="🔍 搜尋題目或選項關鍵字...">
+          <input type="text" id="browseSearch" placeholder="搜尋題目或選項關鍵字...">
           <label class="opt-label"><input type="checkbox" id="hideAns"> 遮住答案(點卡片顯示)</label>
         </div>
         <div id="catChips" class="chips"></div>
@@ -900,7 +902,7 @@
       const wrongDiv = document.createElement('label');
       wrongDiv.className = 'bank-item wrong-item';
       wrongDiv.innerHTML = `<input type="checkbox" id="wrongReview" ${wc ? '' : 'disabled'}>
-      <span class="bank-title"><b>📌 我的錯題複習</b></span>
+      <span class="bank-title"><b>我的錯題複習</b></span>
       <span class="bank-count">${wc} 題</span>`;
       list.appendChild(wrongDiv);
 
@@ -1042,7 +1044,7 @@
       $('verdict').classList.toggle('hidden', !showFb);
       $('expl').classList.toggle('hidden', !(showFb && q.explanation));
       if (showFb) {
-        $('verdict').textContent = st.correct ? '✔ 答對了!' : '✘ 答錯了,正確答案:' +
+        $('verdict').textContent = st.correct ? '答對了!' : '答錯了,正確答案:' +
           q.opts.map((o, i) => o.isAns ? LETTERS[i] : null).filter(Boolean).join('、');
         $('verdict').className = 'verdict ' + (st.correct ? 'ok' : 'no');
         $('expl').textContent = q.explanation || '';
@@ -1304,7 +1306,7 @@
         const opts = q.options.map((t, i) => {
           const ok = q.answers.includes(i);
           return `<div class="qopt ${ok ? 'correct' : ''}"><span class="tag">${LETTERS[i]}</span>` +
-            `<span class="qopt-t">${escapeHtml(t)}</span>${ok ? '<span class="correct-mark">✓</span>' : ''}</div>`;
+            `<span class="qopt-t">${escapeHtml(t)}</span>${ok ? '<span class="correct-mark">正確答案</span>' : ''}</div>`;
         }).join('');
         return `<div class="qcard">
           <div class="qcard-head"><span class="cat-chip">${escapeHtml(q.category || '')}</span>` +
