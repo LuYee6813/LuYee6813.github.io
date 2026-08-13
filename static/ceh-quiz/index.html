@@ -641,6 +641,37 @@
       overflow-y: auto;
     }
 
+    /* 關鍵線索標示 */
+    mark.kw {
+      background: rgba(255, 179, 71, .2);
+      color: #ffd9a0;
+      border-radius: 4px;
+      padding: 0 3px;
+      font-weight: 700;
+    }
+
+    .kw-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      margin: 10px 0 4px;
+    }
+
+    .kw-lab {
+      font-size: .75rem;
+      color: var(--muted);
+    }
+
+    .kw-chip {
+      font-size: .75rem;
+      background: rgba(255, 179, 71, .14);
+      border: 1px solid rgba(255, 179, 71, .35);
+      color: var(--orange);
+      border-radius: 12px;
+      padding: 2px 9px;
+    }
+
     /* 遮答案模式 */
     .mask-on .qcard {
       cursor: pointer;
@@ -738,6 +769,7 @@
         <div class="qsrc" id="qsrc"></div>
         <div class="qtext" id="qtext"></div>
         <div class="qtext-en" id="qtextEn"></div>
+        <div id="qkw"></div>
         <div class="multi-hint hidden" id="multiHint">※ 此題為複選題,請選擇所有正確答案</div>
         <div class="options" id="opts"></div>
         <div class="verdict hidden" id="verdict"></div>
@@ -776,6 +808,7 @@
       <div class="card">
         <div class="brow">
           <input type="text" id="browseSearch" placeholder="搜尋題目或選項關鍵字...">
+          <label class="opt-label"><input type="checkbox" id="showKw" checked> 標示關鍵線索</label>
           <label class="opt-label"><input type="checkbox" id="hideAns"> 遮住答案(點卡片顯示)</label>
         </div>
         <div id="catChips" class="chips"></div>
@@ -1015,8 +1048,11 @@
       $('scoreTxt').textContent = mode === 'practice' && doneSub ? `答對 ${ok} / ${doneSub}` : '';
       $('pfill').style.width = (done / quiz.length * 100) + '%';
       $('qsrc').textContent = `${q.bank} · 原題號 Q${q.num}`;
-      $('qtext').textContent = q.q;
+      // 關鍵線索只在作答後顯示,避免提前洩漏答案
+      const revealKw = st.submitted && mode === 'practice';
+      $('qtext').innerHTML = revealKw ? highlightKw(q.q, q.kw) : escapeHtml(q.q);
       $('qtextEn').textContent = q.q_en || '';
+      $('qkw').innerHTML = revealKw ? kwRow(q.kw) : '';
       $('multiHint').classList.toggle('hidden', q.answers.length <= 1);
 
       const box = $('opts');
@@ -1151,8 +1187,9 @@
         <span class="tag">${LETTERS[i]}</span><span class="body">${escapeHtml(o.text)}${oexpl}</span></div>`;
         }).join('');
         div.innerHTML = `<div class="qsrc">${q.bank} · 原題號 Q${q.num}</div>
-      <div class="qtext">${escapeHtml(q.q)}</div>
+      <div class="qtext">${highlightKw(q.q, q.kw)}</div>
       ${q.q_en ? `<div class="qtext-en">${escapeHtml(q.q_en)}</div>` : ''}
+      ${kwRow(q.kw)}
       <div class="options">${optHtml}</div>
       <div class="verdict no">你的答案:${pickedLetters} → 正確答案:${ansLetters}</div>
       ${q.explanation ? `<div class="expl">${escapeHtml(q.explanation)}</div>` : ''}`;
@@ -1203,6 +1240,35 @@
           '"': '&quot;',
           "'": '&#39;'
         } [c]));
+    }
+
+    /* ---------- 關鍵線索標示 ---------- */
+    // 在題幹中把關鍵字圈起來(只標第一次出現、不重疊)
+    function highlightKw(text, kws) {
+      if (!kws || !kws.length) return escapeHtml(text);
+      const low = text.toLowerCase(), spans = [];
+      kws.forEach(k => {
+        if (!k) return;
+        const i = low.indexOf(k.toLowerCase());
+        if (i < 0) return;
+        const s = i, e = i + k.length;
+        if (spans.some(([a, b]) => !(e <= a || s >= b))) return;
+        spans.push([s, e]);
+      });
+      spans.sort((a, b) => a[0] - b[0]);
+      let out = '', pos = 0;
+      spans.forEach(([s, e]) => {
+        out += escapeHtml(text.slice(pos, s)) +
+          '<mark class="kw">' + escapeHtml(text.slice(s, e)) + '</mark>';
+        pos = e;
+      });
+      return out + escapeHtml(text.slice(pos));
+    }
+
+    function kwRow(kws) {
+      if (!kws || !kws.length) return '';
+      return '<div class="kw-row"><span class="kw-lab">關鍵線索</span>' +
+        kws.map(k => `<span class="kw-chip">${escapeHtml(k)}</span>`).join('') + '</div>';
     }
 
     /* ---------- 使用者管理 ---------- */
@@ -1308,10 +1374,12 @@
           return `<div class="qopt ${ok ? 'correct' : ''}"><span class="tag">${LETTERS[i]}</span>` +
             `<span class="qopt-t">${escapeHtml(t)}</span>${ok ? '<span class="correct-mark">正確答案</span>' : ''}</div>`;
         }).join('');
+        const kwOn = $('showKw').checked;
         return `<div class="qcard">
           <div class="qcard-head"><span class="cat-chip">${escapeHtml(q.category || '')}</span>` +
           `<span class="qnum">原題號 Q${q.num}</span><span class="reveal-hint">點擊顯示答案</span></div>
-          <div class="qcard-q">${escapeHtml(q.q)}</div>
+          <div class="qcard-q">${kwOn ? highlightKw(q.q, q.kw) : escapeHtml(q.q)}</div>
+          ${kwOn ? kwRow(q.kw) : ''}
           <div class="qcard-opts">${opts}</div>
           <details class="qcard-expl"><summary>解析</summary><div class="expl-body">${escapeHtml(q.explanation || '')}</div></details>
         </div>`;
@@ -1339,6 +1407,7 @@
     };
     $('browseSearch').oninput = renderBrowseList;
     $('hideAns').onchange = renderBrowseList;
+    $('showKw').onchange = renderBrowseList;
 
     renderSetup();
   </script>
